@@ -1,0 +1,40 @@
+class UncommonWordsFromTwoSentences {
+    public String[] uncommonFromSentences(String A, String B) {
+        List<String> return_list = new LinkedList<String>();
+        String[] aArray = A.split(" ");
+        String[] bArray = B.split(" ");
+        HashMap<String,Integer> aHashMap = new HashMap<String,Integer>();
+        HashMap<String,Integer> bHashMap = new HashMap<String,Integer>();
+        for(int i=0;i<aArray.length;i++) {
+            if(!aHashMap.containsKey(aArray[i])) {
+                aHashMap.put(aArray[i], 1);
+            }
+            else {
+                aHashMap.put(aArray[i], aHashMap.get(aArray[i])+1);
+            }
+        }
+        for(int i=0;i<bArray.length;i++) {
+            if(!bHashMap.containsKey(bArray[i])) {
+                bHashMap.put(bArray[i], 1);
+            }
+            else {
+                bHashMap.put(bArray[i], bHashMap.get(bArray[i])+1);
+            }
+        }
+        for(int i=0;i<aArray.length;i++) {
+            if(aHashMap.containsKey(aArray[i]) && !bHashMap.containsKey(aArray[i])) {
+                if(aHashMap.get(aArray[i]) < 2) {
+                    return_list.add(aArray[i]);
+                }
+            }            
+        }
+        for(int i=0;i<bArray.length;i++) {
+            if(bHashMap.containsKey(bArray[i]) && !aHashMap.containsKey(bArray[i])) {
+                if(bHashMap.get(bArray[i]) < 2) {
+                    return_list.add(bArray[i]);
+                }
+            }            
+        }
+        return return_list.toArray(new String[return_list.size()]);
+    }
+}
