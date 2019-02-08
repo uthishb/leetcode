@@ -1,0 +1,65 @@
+class Point {
+    int x;
+    int y;
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class IslandPerimeter {
+    public int islandPerimeter(int[][] grid) {
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        Stack<Point> unexploredPoints = new Stack<Point>();
+        int perimeter = 0;
+        for(int i=0;i<grid.length;i++) {
+            for(int j=0;j<grid[0].length;j++) {                
+                if(!visited[i][j]) {           
+                    if(grid[i][j]==1)
+                        unexploredPoints.push(new Point(i,j));
+                    while(unexploredPoints.size() != 0) {
+                        Point current = unexploredPoints.pop();                        
+                        visited[current.x][current.y] = true;                        
+                        
+                        if(current.y != grid[0].length-1) {
+                            if(grid[current.x][current.y+1] == 0) {                                
+                                perimeter++;
+                            }
+                            else {
+                                if(!visited[current.x][current.y+1])
+                                    unexploredPoints.push(new Point(current.x, current.y+1));
+                            }
+                        }
+                        else {                            
+                            perimeter++;
+                        }
+                        if(current.x != grid.length-1) {
+                            if(grid[current.x+1][current.y] == 0) {                                
+                                perimeter++;
+                            }
+                            else {
+                                if(!visited[current.x+1][current.y])
+                                    unexploredPoints.push(new Point(current.x+1, current.y));
+                            }
+                        }
+                        else {                            
+                            perimeter++;
+                        }
+                        if(current.x==0)
+                            perimeter++;
+                        else
+                            if(grid[current.x-1][current.y] == 0)
+                                perimeter++;
+                        if(current.y==0)
+                            perimeter++;
+                        else
+                            if(grid[current.x][current.y-1] == 0)
+                                perimeter++;                           
+                    } 
+                    visited[i][j] = true;
+                }                
+            }        
+        }
+        return perimeter;
+    }
+}
