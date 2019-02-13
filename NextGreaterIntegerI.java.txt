@@ -1,0 +1,32 @@
+class NextGreatestIntegerI {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        if(nums1.length == 0)
+            return new int[0];
+        int[] resultArray = new int[nums1.length];
+        if(nums2.length == 0) {
+            Arrays.fill(resultArray, -1);
+            return resultArray;
+        }            
+        int maxSeen = nums2[nums2.length-1];
+        int[] maxSeenArray = new int[nums2.length];
+        HashMap<Integer, Integer> num2PosArray = new HashMap<Integer, Integer>();
+        for(int i=0;i<nums2.length;i++) {
+            num2PosArray.put(nums2[i], i);
+            maxSeenArray[i] = -1;
+            for(int j=i+1;j<nums2.length;j++) {
+                if(nums2[j] > nums2[i]) {
+                    maxSeenArray[i] = nums2[j];
+                    break;
+                }                    
+            }
+        }        
+        for(int i=0;i<nums1.length;i++) {
+            int positionInNum2 = num2PosArray.get(nums1[i]);
+            if(maxSeenArray[positionInNum2] > nums1[i])
+                resultArray[i] = maxSeenArray[positionInNum2];
+            else
+                resultArray[i] = -1;
+        }
+        return resultArray;
+    }
+}
