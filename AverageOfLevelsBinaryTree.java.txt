@@ -1,0 +1,53 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class AverageOfLevelsBinaryTree {
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> returnList = new LinkedList<Double>();
+        HashMap<Integer, List<Integer>> levels = new HashMap<Integer, List<Integer>>();
+        Stack<TreeNode> elementStack = new Stack<TreeNode>();
+        Stack<Integer> levelStack = new Stack<Integer>();
+        elementStack.push(root);
+        levelStack.push(1);
+        while(!elementStack.empty()) {
+            TreeNode currentElement = elementStack.pop();
+            int currentLevel = levelStack.pop();
+            if(!levels.containsKey(currentLevel)) {
+                List<Integer> currentLevelElements = new LinkedList<Integer>();
+                currentLevelElements.add(currentElement.val);
+                levels.put(currentLevel, currentLevelElements);
+            }
+            else {
+                List<Integer> currentLevelElements = levels.get(currentLevel);
+                currentLevelElements.add(currentElement.val);
+                levels.put(currentLevel, currentLevelElements);
+            }
+            if(currentElement.left!=null) {
+                elementStack.push(currentElement.left);
+                levelStack.push(currentLevel+1);
+            }                
+            if(currentElement.right!=null) {
+                elementStack.push(currentElement.right);
+                levelStack.push(currentLevel+1);
+            }                
+        }
+        int i = 1;
+        while(levels.containsKey(i)) {
+            double currentSum = 0;
+            List<Integer> currentLevelList = levels.get(i);
+            Iterator<Integer> it = currentLevelList.iterator();
+            while(it.hasNext()) {
+                currentSum += it.next();
+            }
+            returnList.add((double)currentSum/currentLevelList.size());
+            i++;
+        }
+        return returnList;
+    }
+}
