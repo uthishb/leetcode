@@ -1,0 +1,53 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> children;
+
+    public Node() {}
+
+    public Node(int _val,List<Node> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+class Solution {
+    public List<List<Integer>> levelOrder(Node root) {
+        List<List<Integer>> traversalOrderList = new LinkedList<List<Integer>>();
+        if(root == null) {
+            return traversalOrderList;
+        }
+        HashMap<Integer, List<Integer>> levels = new HashMap<Integer, List<Integer>>();       
+        Queue<Node> nodeQ = new LinkedList<Node>();
+        Queue<Integer> levelQ = new LinkedList<Integer>();
+        nodeQ.add(root);
+        levelQ.add(1);
+        while(!nodeQ.isEmpty()) {
+            Node currentNode = nodeQ.remove();
+            int currentLevel = levelQ.remove();
+            List<Integer> currentList;
+            if(!levels.containsKey(currentLevel)) {
+                currentList = new LinkedList<Integer>();                
+            }
+            else {
+                currentList = levels.get(currentLevel);                
+            }
+            currentList.add(currentNode.val);
+            levels.put(currentLevel, currentList);
+            if(currentNode.children != null) {
+                Iterator<Node> childIterator = currentNode.children.iterator();
+                while(childIterator.hasNext()) {
+                    nodeQ.add(childIterator.next());
+                    levelQ.add(currentLevel+1);
+                }   
+            }                        
+        }
+        int currentLevel = 1;
+        while(levels.containsKey(currentLevel)) {
+            traversalOrderList.add(levels.get(currentLevel));
+            currentLevel++;
+        }
+        return traversalOrderList;
+    }
+}
