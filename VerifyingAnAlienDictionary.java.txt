@@ -1,0 +1,31 @@
+class Solution {
+    public boolean isAlienSorted(String[] words, String order) {
+        //If there is only one word, it is already in order
+        if(words.length == 1)
+            return true;
+        
+        //Store the order in an array for faster access
+        int[] letterOrder = new int[26];
+        for(int i=0;i<order.length();i++) {
+            letterOrder[order.charAt(i)-'a'] = i;
+        }
+        
+        //Check if adjacent words are in order
+        for(int i=0;i<words.length-1;i++) {
+            int wordCounter1 = 0;
+            int wordCounter2 = 0;
+            int equalCount = 0;
+            while((wordCounter1 < words[i].length()) && (wordCounter2 < words[i+1].length())) {                   
+                if(letterOrder[words[i].charAt(wordCounter1)-'a'] > letterOrder[words[i+1].charAt(wordCounter2)-'a'])
+                    return false;
+                else if(letterOrder[words[i].charAt(wordCounter1)-'a'] < letterOrder[words[i+1].charAt(wordCounter2)-'a'])
+                    break;
+                wordCounter1++;
+                wordCounter2++;
+            }
+            if(wordCounter1 == words[i].length() || wordCounter2 == words[i+1].length())
+                return false;
+        }
+        return true;
+    }
+}
