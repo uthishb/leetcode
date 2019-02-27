@@ -1,0 +1,85 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {                
+        /*
+        Edge cases : 
+        1. l1 is null and l2 is not null
+        2. l2 is null and l1 is not null
+        3. Both l1 and l2 are null
+        4. The lists are not of equal length
+        5. The last digit has a carry over value        
+        */
+        int currentDigit = 0;
+        int currentCarryover = 0; 
+        
+        ListNode l1Pointer = l1;
+        ListNode l2Pointer = l2;
+        
+        ListNode result = null;
+        ListNode resultHead = null;
+                
+        //Normal case when both l1 and l2 are non null
+        while(l1Pointer != null && l2Pointer != null) {
+            currentDigit = (currentCarryover + l1Pointer.val + l2Pointer.val)%10;
+            currentCarryover = (currentCarryover + l1Pointer.val + l2Pointer.val)/10;
+            ListNode currentNode = new ListNode(currentDigit);
+            if(result == null) {
+                result = currentNode;
+                resultHead = currentNode;
+            }
+            else {
+                result.next = currentNode;
+                result = result.next;
+            }
+            l1Pointer = l1Pointer.next;
+            l2Pointer = l2Pointer.next;
+        }
+        
+        //Case when l2 is null or l2 is shorter than l1
+        while(l1Pointer != null) {
+            currentDigit = (currentCarryover + l1Pointer.val)%10;
+            currentCarryover = (currentCarryover + l1Pointer.val)/10;
+            ListNode currentNode = new ListNode(currentDigit);
+            if(result == null) {
+                result = currentNode;
+                resultHead = currentNode;
+            }
+            else {
+                result.next = currentNode;
+                result = result.next;
+            }
+            l1Pointer = l1Pointer.next;            
+        }
+        
+        ////Case when l1 is null or l1 is shorter than l2
+        while(l2Pointer != null) {
+            currentDigit = (currentCarryover + l2Pointer.val)%10;
+            currentCarryover = (currentCarryover + l2Pointer.val)/10;
+            ListNode currentNode = new ListNode(currentDigit);
+            if(result == null) {
+                result = currentNode;
+                resultHead = currentNode;
+            }
+            else {
+                result.next = currentNode;
+                result = result.next;
+            }
+            l2Pointer = l2Pointer.next;            
+        }
+        
+        //Case when the last digit has a carry over
+        if(currentCarryover > 0) {
+            ListNode currentNode = new ListNode(currentCarryover);
+            result.next = currentNode;
+        }
+        
+        return resultHead;
+    }
+}
