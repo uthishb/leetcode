@@ -1,0 +1,61 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {        
+    
+    class ParentAndLevel {
+        TreeNode parent;
+        int level;
+        ParentAndLevel(TreeNode parent, int level) {
+            this.parent = parent;
+            this.level = level;
+        }
+    }
+    
+    public ParentAndLevel findNode(TreeNode root, int val) {
+        int level = 0;
+        Stack<TreeNode> nodeStack = new Stack<TreeNode>();
+        Stack<Integer> levelStack = new Stack<Integer>();
+        nodeStack.push(root);
+        levelStack.push(level);
+        while(!nodeStack.empty()) {
+            TreeNode currentNode = nodeStack.pop();
+            int currentLevel = levelStack.pop();
+            if(currentNode.left != null) {
+                if(currentNode.left.val == val) {
+                    ParentAndLevel pal = new ParentAndLevel(currentNode, currentLevel+1);
+                    return pal;
+                }                
+                nodeStack.push(currentNode.left);
+                levelStack.push(currentLevel+1);
+            }
+            if(currentNode.right != null) {
+                if(currentNode.right.val == val) {
+                    ParentAndLevel pal = new ParentAndLevel(currentNode, currentLevel+1);
+                    return pal;
+                }              
+                nodeStack.push(currentNode.right);
+                levelStack.push(currentLevel+1);
+            }
+        }
+        return null;
+    }
+    
+    public boolean isCousins(TreeNode root, int x, int y) {
+        ParentAndLevel xPAL = findNode(root, x);
+        ParentAndLevel yPAL = findNode(root, y);
+        if(xPAL == null || yPAL == null)
+            return false;
+        if(xPAL.level != yPAL.level)
+            return false;
+        if(xPAL.parent != yPAL.parent)
+            return true;
+        return false;
+    }
+}
