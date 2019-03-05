@@ -1,0 +1,31 @@
+class Solution {
+    public String[] findWords(String[] words) {
+        /*
+        corner cases:
+        1. Words array is null.
+        2. Words array is empty.
+        */
+        //dealing with case when words array is null
+        LinkedList<String> singleRowList = new LinkedList<String>();
+        if(words == null)
+            return null;
+        if(words.length == 0)
+            return singleRowList.toArray(new String[singleRowList.size()]);
+        //define a string with keyboard row number for each letter of the alphabet
+        String rowString = "23321222122233111121131313";
+        for(int i=0;i<words.length;i++) {
+            boolean isSingleRow = true;
+            for(int j=0;j<words[i].length();j++) {
+                int firstCharacter = Character.toLowerCase(words[i].charAt(0)) - 'a';
+                int currentCharacter = Character.toLowerCase(words[i].charAt(j)) - 'a';
+                if(rowString.charAt(firstCharacter) != rowString.charAt(currentCharacter)) {
+                    isSingleRow = false;
+                    break;
+                }
+            }
+            if(isSingleRow)
+                singleRowList.add(words[i]);
+        }
+        return singleRowList.toArray(new String[singleRowList.size()]);
+    }
+}
