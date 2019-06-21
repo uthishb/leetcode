@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ /*
+ Solution : 
+ 1. If both t1 and t2 exists, create a new treenode with val = t1.val+t2.val and recirse left and right subtrees
+ 2. If only one of t1 or t2 exists then set val to val of the node of the tree that exists and set the children
+    to that nodes children. 
+Run time : O(m) where m is the number of matching nodes.
+Space : O(m) where m is the number of matching nodes.
+ */
+class Solution {
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if(t1==null&&t2==null)
+            return null;
+        TreeNode thisNode = null;
+        if(t1==null) {
+            thisNode = new TreeNode(t2.val);
+            thisNode.right = t2.right;
+            thisNode.left = t2.left;
+            return thisNode;
+        }            
+        if(t2==null) {
+            thisNode = new TreeNode(t1.val);
+            thisNode.right = t1.right;
+            thisNode.left = t1.left;
+            return thisNode;
+        }            
+        thisNode = new TreeNode(t1.val+t2.val);
+        thisNode.right = mergeTrees(t1.right, t2.right);
+        thisNode.left = mergeTrees(t1.left, t2.left);
+        return thisNode;
+    }
+}
