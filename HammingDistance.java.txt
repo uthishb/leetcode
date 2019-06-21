@@ -1,0 +1,19 @@
+/*
+1. Do a bitwise XOR to obtain bits which are different
+2. Odd numbers will have a value of 1 in the least significant bit.
+3. So repeatedly check if the XOR'd number is divisible by 1 and 
+    if so increment 1 count and right shift by 1 as long as XOR'd value is greater than 0.
+*/
+
+class Solution {
+    public int hammingDistance(int x, int y) {
+        int bitwiseXOR = x^y;
+        int hammingDist = 0;
+        while(bitwiseXOR!=0) {
+            if(bitwiseXOR%2==1)
+                hammingDist++;
+            bitwiseXOR = bitwiseXOR >> 1;
+        }
+        return hammingDist;
+    }
+}
