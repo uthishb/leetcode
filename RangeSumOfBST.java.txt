@@ -1,0 +1,36 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+/*
+Approach : 
+Simple pre order traversal. If root is within range then add root to sum , recruse left
+and right children. If root is less than L then recruse the right subtree. If root is greater
+than R then recurse the left subtree. 
+Edge cases :
+1. When root is null.
+2. What if the sum exceeds integer value. (won't exceed integer)
+3. What about duplicate values ? (no duplicate values)
+*/
+class Solution {
+    public int rangeSumBST(TreeNode root, int L, int R) {
+        if(root==null)
+            return 0;
+        int sum=0;
+        if(root.val >=L && root.val <= R) {
+            sum = root.val + rangeSumBST(root.left, L, R) + rangeSumBST(root.right, L, R);       
+        }
+        else if(root.val < L) {
+            sum = rangeSumBST(root.right, L, R);
+        }
+        else if(root.val > R) {
+            sum = rangeSumBST(root.left, L, R);
+        }
+        return sum;
+    }
+}
