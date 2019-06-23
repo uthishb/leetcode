@@ -1,0 +1,32 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+class Solution {
+    public int maxSum = Integer.MIN_VALUE;
+    
+    public int maxPathSumWithNode(TreeNode root) {
+        if(root==null)
+            return 0;
+        int leftSubTreePathSum = maxPathSumWithNode(root.left);
+        int rightSubTreePathSum = maxPathSumWithNode(root.right);
+        int maxSumAtCurrentNode = Math.max(root.val, root.val + leftSubTreePathSum);
+        maxSumAtCurrentNode = Math.max(maxSumAtCurrentNode, root.val + rightSubTreePathSum);
+        maxSumAtCurrentNode = Math.max(maxSumAtCurrentNode, root.val + rightSubTreePathSum + leftSubTreePathSum);
+        int maxOneChild = Math.max(leftSubTreePathSum, rightSubTreePathSum) + root.val;
+        maxOneChild = Math.max(maxOneChild, root.val);
+        maxSum = Math.max(maxSum, maxSumAtCurrentNode);        
+        return maxOneChild;    
+    }
+    
+    public int maxPathSum(TreeNode root) {
+        maxPathSumWithNode(root);
+        return maxSum;
+    }
+}
