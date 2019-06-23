@@ -1,0 +1,95 @@
+class Solution {
+    public int[] findRedundantDirectedConnection(int[][] edges) {
+        HashMap<Integer, List<Integer>> out = new HashMap<Integer, List<Integer>>();
+        HashMap<Integer, List<Integer>> in = new HashMap<Integer, List<Integer>>();
+        //Construct in and out lists
+        for(int i=0;i<edges.length;i++) {
+            int[] currentEdge = edges[i];
+            if(out.containsKey(currentEdge[0])) {
+                List<Integer> list = out.get(currentEdge[0]);
+                list.add(currentEdge[1]);
+                out.put(currentEdge[0], list);
+            }
+            else {
+                List<Integer> list = new LinkedList<Integer>();
+                list.add(currentEdge[1]);
+                out.put(currentEdge[0], list);
+            }
+            if(in.containsKey(currentEdge[1])) {
+                List<Integer> list = in.get(currentEdge[1]);
+                list.add(currentEdge[0]);
+                in.put(currentEdge[1], list);
+            }
+            else {
+                List<Integer> list = new LinkedList<Integer>();
+                list.add(currentEdge[0]);
+                in.put(currentEdge[1], list);
+            }
+        }
+        
+        //Check for existence of a single node with two parents
+        int nodeWithTwoParents = 0;
+        for (Map.Entry<Integer,List<Integer>> entry : in.entrySet())  {
+            int currentNode = entry.getKey();
+            List<Integer> currentParents = entry.getValue();
+            if(currentParents.size() > 1)
+                nodeWithTwoParents = currentNode;               
+        }
+        
+        if(nodeWithTwoParents == 0) {        
+            Stack<Integer> dfsStack = new Stack<Integer>();
+            HashSet<Integer> visited = new HashSet<Integer>();
+            dfsStack.push(edges[0][0]);
+            while(dfsStack.size() > 0) {
+                int currentNode = dfsStack.pop();
+                visited.add(currentNode);
+                List<Integer> currentEdges = out.get(currentNode);
+                if(currentEdges == null)
+                    continue;
+                Iterator<Integer> edgeIterator = currentEdges.iterator();
+                while(edgeIterator.hasNext()) {
+                    int thisNode = edgeIterator.next();
+                    if(visited.contains(thisNode)) {
+                        int[] retVal = new int[2];
+                        retVal[0] = currentNode;
+                        retVal[1] = thisNode;
+                        return retVal;
+                    }
+                    dfsStack.push(thisNode);
+                }
+            }    
+        }
+        
+        else {
+            Stack<Integer> dfsStack = new Stack<Integer>();
+            HashSet<Integer> visited = new HashSet<Integer>();
+            dfsStack.push(nodeWithTwoParents);
+            while(dfsStack.size() > 0) {
+                int currentNode = dfsStack.pop();
+                visited.add(currentNode);
+                List<Integer> currentEdges = out.get(currentNode);
+                if(currentEdges == null)
+                    continue;
+                Iterator<Integer> edgeIterator = currentEdges.iterator();
+                while(edgeIterator.hasNext()) {
+                    int thisNode = edgeIterator.next();
+                    if(visited.contains(thisNode)) {
+                        int[] retVal = new int[2];
+                        retVal[0] = currentNode;
+                        retVal[1] = thisNode;
+                        return retVal;
+                    }
+                    dfsStack.push(thisNode);
+                }
+            }
+            Iterator<Integer> parentIterator = in.get(nodeWithTwoParents).iterator();
+            int[] retVal = new int[2];
+            parentIterator.next();
+            retVal[0] = parentIterator.next();
+            retVal[1] = nodeWithTwoParents;
+            return retVal;
+        }
+                
+        return new int[2];
+    }
+}
