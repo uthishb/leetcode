@@ -1,0 +1,29 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> children;
+
+    public Node() {}
+
+    public Node(int _val,List<Node> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+class Solution {
+    public List<Integer> postorder(Node root) {
+        if(root==null)
+            return new LinkedList<Integer>();
+        LinkedList<Integer> returnList = new LinkedList<Integer>();
+        Iterator<Node> it = root.children.iterator();
+        while(it.hasNext()) {
+            List<Integer> currentSubtree = postorder(it.next());
+            if(currentSubtree!=null)
+                returnList.addAll(currentSubtree);
+        }
+        returnList.add(root.val);
+        return returnList;
+    }
+}
