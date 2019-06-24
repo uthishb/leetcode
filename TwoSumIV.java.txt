@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+    
+    public void dfs(TreeNode root) {
+        if(root==null)
+            return;
+        if(map.containsKey(root.val)) {
+            int count = map.get(root.val);
+            map.put(root.val, count+1);
+        }
+        else {
+            map.put(root.val, 1);
+        }
+        dfs(root.left);
+        dfs(root.right);
+    }
+    
+    public boolean findTarget(TreeNode root, int k) {
+        dfs(root);
+        for(Map.Entry<Integer, Integer> entry:map.entrySet()) {
+            int currentNode = entry.getKey();
+            int count = entry.getValue();
+            if(k==2*currentNode) {
+                if(count > 1)
+                    return true;
+            }
+            else {
+                if(map.containsKey(k-currentNode))
+                    return true;
+            }
+        }
+        return false;
+    }
+}
