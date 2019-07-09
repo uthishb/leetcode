@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    
+    Integer smallest = null;
+    Integer second = null;
+    
+    public void traverse(TreeNode root) {        
+        if(root==null)
+            return;        
+        if(second == null && root.val != smallest)
+            second = root.val;
+        else if(second != null && root.val != smallest) {
+            if(root.val < second) {
+                second = root.val;
+            }
+        }
+        traverse(root.left);
+        traverse(root.right);
+    }
+    
+    public int findSecondMinimumValue(TreeNode root) {
+        if(root==null)
+            return -1;
+        smallest = root.val;
+        traverse(root);
+        if(second == null)
+            return -1;
+        return second;
+    }
+}
